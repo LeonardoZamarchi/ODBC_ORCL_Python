@@ -9,7 +9,7 @@ password = os.environ['USER_PWD'] #set a enviroment path to keep your pwd
 def conecta_odbc():
     username = os.environ['USERNAME']  
     password = os.environ['USER_PWD']
-    server = 'virtualizador.sicredi.net' 
+    server = 'server.net' 
     database = 'ldw'     
     con = pyodbc.connect('DRIVER={driver_name};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
     return con
