@@ -15,11 +15,11 @@ def conecta_odbc():
     return con
 
 
-def select(con, columns, table, exception):
-    if len(exception.replace(' ','')) < 1:
+def select(con, columns, table, condit):
+    if len(condit.replace(' ','')) < 1:
         select = 'SELECT '+columns+' from '+table
     else:
-        select = 'SELECT '+columns+' from '+table+ ' where '+exception
+        select = 'SELECT '+columns+' from '+table+ ' where '+condit
     
     table = pd.read_sql(select,con)
     df = pd.DataFrame(table)
