@@ -1,3 +1,3 @@
-# ODBC_Python
+# ODBC_ORCL_Python
 
-ODBC functions python
+ODBC and ORCL functions python
