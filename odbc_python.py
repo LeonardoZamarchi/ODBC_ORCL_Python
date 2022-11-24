@@ -55,6 +55,7 @@ def select_oracle(con, columns, table, exception):
 
 def insert_oracle(con, df, table):
     try:
+        cursor =  con.cursor()
         col = df.columns.tolist()
         vrs = ""
         for i in range(0,len(col)):
@@ -63,9 +64,7 @@ def insert_oracle(con, df, table):
         sql = 'INSERT INTO '+table+' VALUES ('+vrs.rstrip(',')+')'
         for i in range(0,len(df)):
             cols.append(tuple(df.fillna('').values[i]))
-            print(i)
-        con = conecta_oracle()
-        cursor =  con.cursor()
+            print(i)        
         cursor.executemany(sql,cols)
         con.commit()
     except cx_Oracle.Error as error:
