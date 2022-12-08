@@ -61,9 +61,10 @@ def insert_oracle(con, df, table):
         for i in range(0,len(col)):
             vrs += ':'+str(i+1)+','
         cols = []
+        df = df.fillna('')
         sql = 'INSERT INTO '+table+' VALUES ('+vrs.rstrip(',')+')'
         for i in range(0,len(df)):
-            cols.append(tuple(df.fillna('').values[i]))
+            cols.append(tuple(df.values[i]))
             print(i)        
         cursor.executemany(sql,cols)
         con.commit()
