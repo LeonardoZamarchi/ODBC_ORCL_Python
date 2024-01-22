@@ -1,3 +1,3 @@
 # ODBC_ORCL_Python
 
-ODBC and ORCL functions python
+ODBC, ORCL and Smart View connection and functions python
