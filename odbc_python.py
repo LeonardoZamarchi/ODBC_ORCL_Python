@@ -89,11 +89,14 @@ def update_database():
 
         # SQL query to update the table
         update_query = """UPDATE table SET column = value WHERE condition"""
+        query = """SELECT * FROM nome_da_tabela"""
+        
         cursor.execute(update_query)
-
+        dataframe = cursor.execute(query)
         # Commit the changes made to the database
         connection.commit()
         print("Database successfully updated")
+        return query
 
     except (Exception, psycopg2.Error) as error:
         print("Error while updating PostgreSQL table", error)
@@ -105,4 +108,5 @@ def update_database():
             print("PostgreSQL connection is closed")
 
 # Call the function
-update_database()
+table = update_database()
+insert_oracle(table)
