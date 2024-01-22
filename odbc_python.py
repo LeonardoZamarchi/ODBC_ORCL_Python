@@ -2,6 +2,7 @@ import pyodbc
 import env
 import os
 import pandas as pd
+import psycopg2
 
 username = os.environ['USERNAME']  
 password = os.environ['USER_PWD'] #set a enviroment path to keep your pwd
@@ -70,3 +71,38 @@ def insert_oracle(con, df, table):
         con.commit()
     except cx_Oracle.Error as error:
         print('Error occurred: '+error)
+
+
+def update_database():
+    try:
+        # Establish a connection to the database
+        connection = psycopg2.connect(
+            database="database",
+            user="user",
+            password="password",
+            host="host",
+            port="5432"
+        )
+
+        # Create a cursor object
+        cursor = connection.cursor()
+
+        # SQL query to update the table
+        update_query = """UPDATE table SET column = value WHERE condition"""
+        cursor.execute(update_query)
+
+        # Commit the changes made to the database
+        connection.commit()
+        print("Database successfully updated")
+
+    except (Exception, psycopg2.Error) as error:
+        print("Error while updating PostgreSQL table", error)
+    finally:
+        # Close the database connection
+        if connection:
+            cursor.close()
+            connection.close()
+            print("PostgreSQL connection is closed")
+
+# Call the function
+update_database()
