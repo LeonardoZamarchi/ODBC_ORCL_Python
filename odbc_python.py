@@ -92,6 +92,7 @@ def update_database():
         query = """SELECT * FROM nome_da_tabela"""
         
         cursor.execute(update_query)
+        #apply the return of query in a dataframe to send to other bases
         dataframe = cursor.execute(query)
         # Commit the changes made to the database
         connection.commit()
