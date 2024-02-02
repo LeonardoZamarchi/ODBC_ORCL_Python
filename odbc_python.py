@@ -92,8 +92,6 @@ def update_database():
         query = """SELECT * FROM nome_da_tabela"""
         
         cursor.execute(update_query)
-        #apply the return of query in a dataframe to send to other bases
-        dataframe = cursor.execute(query)
         # Commit the changes made to the database
         connection.commit()
         print("Database successfully updated")
@@ -107,7 +105,4 @@ def update_database():
             cursor.close()
             connection.close()
             print("PostgreSQL connection is closed")
-
-# Call the function
-table = update_database()
-insert_oracle(table)
+)
