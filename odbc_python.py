@@ -11,7 +11,7 @@ def conecta_odbc():
     username = os.environ['USERNAME']  
     password = os.environ['USER_PWD']
     server = 'server.net' 
-    database = 'ldw'     
+    database = 'database_name'     
     con = pyodbc.connect('DRIVER={driver_name};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
     return con
 
