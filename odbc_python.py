@@ -55,54 +55,49 @@ def select_oracle(con, columns, table, exception):
 
 
 def insert_oracle(con, df, table):
-    try:
-        cursor =  con.cursor()
-        col = df.columns.tolist()
-        vrs = ""
-        for i in range(0,len(col)):
-            vrs += ':'+str(i+1)+','
+    col = df.columns.tolist()
+    print(col)
+    vrs = ""
+    for i in range(0,len(col)):
+        vrs += ':'+str(i+1)+','
+    sql = 'INSERT INTO '+table+' VALUES ('+vrs.rstrip(',')+')'
+    print(sql)
+    df = df.fillna('')
+    j = 0
+    while j < len(df):
         cols = []
-        df = df.fillna('')
-        sql = 'INSERT INTO '+table+' VALUES ('+vrs.rstrip(',')+')'
-        for i in range(0,len(df)):
+        for i in range(j,len(df)):
             cols.append(tuple(df.values[i]))
-            print(i)        
-        cursor.executemany(sql,cols)
+            print(i)
+            print(tuple(df.values[i]))
+            j +=1
+            if len(cols) == 50000:
+                j +=1
+                break                               
+        cursor =  con.cursor()
+        cursor.executemany(sql,cols,batcherrors=True)
+        for error in cursor.getbatcherrors():
+            print("Error", error.message, "at row offset", error.offset)
         con.commit()
-    except cx_Oracle.Error as error:
-        print('Error occurred: '+error)
 
-
-def update_database():
-    try:
-        # Establish a connection to the database
-        connection = psycopg2.connect(
-            database="database",
-            user="user",
-            password="password",
-            host="host",
-            port="5432"
-        )
-
-        # Create a cursor object
-        cursor = connection.cursor()
-
-        # SQL query to update the table
-        update_query = """UPDATE table SET column = value WHERE condition"""
-        query = """SELECT * FROM nome_da_tabela"""
-        
-        cursor.execute(update_query)
-        # Commit the changes made to the database
-        connection.commit()
-        print("Database successfully updated")
-        return query
-
-    except (Exception, psycopg2.Error) as error:
-        print("Error while updating PostgreSQL table", error)
-    finally:
-        # Close the database connection
-        if connection:
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
-)
+def update_database(con, df, table):
+    col = df.columns.tolist()
+    vrs = ""
+    for i in range(len(col)):
+        vrs += col[i] + '=:' + str(i + 1) + ','
+    sql = f'UPDATE {table} SET {vrs.rstrip(",")} WHERE num_conta = :{len(col) + 1}'
+    df = df.fillna('')
+    j = 0
+    while j < len(df):
+        cols = []
+        for i in range(j, len(df)):
+            cols.append(tuple(df.values[i]))
+            j += 1
+            if len(cols) == 50000:
+                j += 1
+                break
+        cursor = con.cursor()
+        cursor.executemany(sql, cols, batcherrors=True)
+        for error in cursor.getbatcherrors():
+            print("Error", error.message, "at row offset", error.offset)
+        con.commit()
